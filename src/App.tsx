@@ -7,7 +7,7 @@ import StatsOverview from './components/StatsOverview';
 import { FilterOptions } from './types';
 import { filterProjects, getHighQualityProjects, sortProjects } from './utils';
 // import portfolioData from './data/projects';
-import portfolioDataJson from './data/projects_scan_result.json';
+import portfolioDataJson from '../projects_scan_result.json';
 
 type ViewMode = 'projects' | 'stats';
 
