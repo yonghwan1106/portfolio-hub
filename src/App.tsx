@@ -6,7 +6,8 @@ import FilterBar from './components/FilterBar';
 import StatsOverview from './components/StatsOverview';
 import { FilterOptions } from './types';
 import { filterProjects, getHighQualityProjects, sortProjects } from './utils';
-import portfolioData from './data/projects';
+// import portfolioData from './data/projects';
+import portfolioDataJson from './data/projects_scan_result.json';
 
 type ViewMode = 'projects' | 'stats';
 
@@ -22,18 +23,18 @@ function App() {
 
   // 프로젝트 필터링 및 정렬
   const filteredProjects = useMemo(() => {
-    const filtered = filterProjects(portfolioData.projects, filters);
+    const filtered = filterProjects(portfolioDataJson.projects, filters);
     return sortProjects(filtered, sortBy);
   }, [filters, sortBy]);
 
   // 카테고리 목록
   const categories = useMemo(() => {
-    return Array.from(new Set(portfolioData.projects.map(p => p.category))).sort();
+    return Array.from(new Set(portfolioDataJson.projects.map(p => p.category))).sort();
   }, []);
 
   // 추천 프로젝트 (높은 품질)
   const featuredProjects = useMemo(() => {
-    return getHighQualityProjects(portfolioData.projects, 3);
+    return getHighQualityProjects(portfolioDataJson.projects, 3);
   }, []);
 
   return (
@@ -53,7 +54,7 @@ function App() {
               }`}
             >
               <Grid className="w-4 h-4" />
-              프로젝트 ({portfolioData.projects.length})
+              프로젝트 ({portfolioDataJson.projects.length})
             </button>
             
             <button
@@ -97,7 +98,7 @@ function App() {
               filters={filters}
               onFiltersChange={setFilters}
               categories={categories}
-              totalCount={portfolioData.projects.length}
+              totalCount={portfolioDataJson.projects.length}
               filteredCount={filteredProjects.length}
             />
 
@@ -158,7 +159,7 @@ function App() {
               </p>
             </div>
             
-            <StatsOverview projects={portfolioData.projects} />
+            <StatsOverview projects={portfolioDataJson.projects} />
           </div>
         )}
       </main>
@@ -174,11 +175,11 @@ function App() {
               📧 sanoramyun8@gmail.com | 📱 010-7939-3123 | 🏢 크리에이티브 넥서스
             </p>
             <div className="mt-4 flex justify-center gap-4 text-sm text-gray-500">
-              <span>총 {portfolioData.projects.length}개 프로젝트</span>
+              <span>총 {portfolioDataJson.projects.length}개 프로젝트</span>
               <span>•</span>
-              <span>{portfolioData.projects.filter(p => p.is_live).length}개 라이브 사이트</span>
+              <span>{portfolioDataJson.projects.filter(p => p.is_live).length}개 라이브 사이트</span>
               <span>•</span>
-              <span>평균 품질 {Math.round(portfolioData.statistics.avg_quality_score)}점</span>
+              <span>평균 품질 {Math.round(portfolioDataJson.projects.reduce((sum, p) => sum + (p.quality_score || 0), 0) / portfolioDataJson.projects.length)}점</span>
             </div>
           </div>
         </div>
